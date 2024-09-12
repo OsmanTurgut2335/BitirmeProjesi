@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "18897779070",
+    "project_id": "bootcampbitirme-18426",
+    "storage_bucket": "bootcampbitirme-18426.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:18897779070:android:35818747188b3a97199b2f",
+        "android_client_info": {
+          "package_name": "com.osman.bitirmeprojesi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDi4qpnyDjmlJm35wevERFSUIWt5v3Nhuo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
