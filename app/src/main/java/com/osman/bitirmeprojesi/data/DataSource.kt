@@ -2,8 +2,12 @@ package com.osman.bitirmeprojesi.data
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.osman.bitirmeprojesi.entity.Food
+import com.osman.bitirmeprojesi.retrofit.FoodDao
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-class DataSource {
+class DataSource (var foodDao: FoodDao){
 
     // TODO:  login işlevi öncelikli olarak yapılacak
 
@@ -22,6 +26,15 @@ class DataSource {
                 }
             }
     }
+
+    // TODO: fooddao ile ana ekranda tüm yemekleri göstermek istenilecek
+
+    suspend fun loadAllFood() : List<Food> = withContext(Dispatchers.IO){
+
+        return@withContext foodDao.loadAllFood().foodList
+
+    }
+
 
 
 }

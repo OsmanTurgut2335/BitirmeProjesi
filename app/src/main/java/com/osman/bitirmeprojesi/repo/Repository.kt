@@ -2,6 +2,7 @@ package com.osman.bitirmeprojesi.repo
 
 import com.google.firebase.auth.FirebaseUser
 import com.osman.bitirmeprojesi.data.DataSource
+import com.osman.bitirmeprojesi.entity.Food
 
 class Repository (val dataSource: DataSource){
 
@@ -10,5 +11,8 @@ class Repository (val dataSource: DataSource){
             callback(result)
         }
     }
+
+    suspend fun loadAllFood() : List<Food> = dataSource.loadAllFood()
+
 
 }

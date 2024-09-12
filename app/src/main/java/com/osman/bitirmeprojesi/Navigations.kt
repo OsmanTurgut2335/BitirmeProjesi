@@ -7,28 +7,36 @@ import androidx.navigation.NavHost
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.gson.Gson
+import com.osman.bitirmeprojesi.entity.Food
+import com.osman.bitirmeprojesi.viewmodels.DetailsScreenViewModel
+import com.osman.bitirmeprojesi.viewmodels.HomeScreenViewModel
 import com.osman.bitirmeprojesi.viewmodels.LoginScreenViewModel
 import com.osman.bitirmeprojesi.views.DetailsScreen
 import com.osman.bitirmeprojesi.views.HomeScreen
 import com.osman.bitirmeprojesi.views.LoginScreen
+import com.osman.bitirmeprojesi.views.PaymentScreen
 
 
 @Composable
-fun Navigations(loginScreenViewModel: LoginScreenViewModel) {
+fun Navigations(loginScreenViewModel: LoginScreenViewModel,homeScreenViewModel: HomeScreenViewModel,
+                detailsScreenViewModel: DetailsScreenViewModel) {
    val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "loginscreen") {
+    NavHost(navController = navController, startDestination = "homeScreen") {
         composable("loginscreen") {
-           LoginScreen(navController, loginScreenViewModel)
+            LoginScreen(navController, loginScreenViewModel)
         }
         composable("homeScreen") {
-            HomeScreen()
+            HomeScreen(homeScreenViewModel,navController)
         }
-        composable("detailsScreen") {
-            DetailsScreen()
+        composable("detailsScreen/{foodJson}") { backStackEntry ->
+            val foodJson = backStackEntry.arguments?.getString("foodJson")
+            val food = Gson().fromJson(foodJson, Food::class.java) // Deserialize the JSON to a Food object
+            DetailsScreen(food = food, detailsScreenViewModel,navController )
         }
         composable("paymentScreen") {
-            HomeScreen()
+            PaymentScreen()
         }
     }
 
