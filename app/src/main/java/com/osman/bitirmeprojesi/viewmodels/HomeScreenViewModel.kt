@@ -11,11 +11,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeScreenViewModel @Inject constructor(val repository: Repository) : ViewModel(){
-   val allFoodList = MutableLiveData<List<Food>>()
+class HomeScreenViewModel @Inject constructor(val repository: Repository,) : ViewModel(){
+    var allFoodList = MutableLiveData<List<Food>>()
+    var favoriteFoodsList =MutableLiveData<List<Food>>()
 
     init {
         loadAllFood()
+
     }
 
     fun loadAllFood() {
@@ -26,6 +28,16 @@ class HomeScreenViewModel @Inject constructor(val repository: Repository) : View
 
         }
     }
+    // Method to save the favorite foods list
+    fun saveFavoriteFoods(favoriteFoods: List<Food>) {
+        repository.saveFavoriteFoods(favoriteFoods)
+    }
+
+    // Method to get the favorite foods list
+    fun getFavoriteFoods(): List<Food> {
+        return repository.getFavoriteFoods()
+    }
+
 
 
 }

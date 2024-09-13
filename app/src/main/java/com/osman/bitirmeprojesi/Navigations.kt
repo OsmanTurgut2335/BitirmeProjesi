@@ -10,9 +10,11 @@ import androidx.navigation.compose.rememberNavController
 import com.google.gson.Gson
 import com.osman.bitirmeprojesi.entity.Food
 import com.osman.bitirmeprojesi.viewmodels.DetailsScreenViewModel
+import com.osman.bitirmeprojesi.viewmodels.FavoritesScreenViewModel
 import com.osman.bitirmeprojesi.viewmodels.HomeScreenViewModel
 import com.osman.bitirmeprojesi.viewmodels.LoginScreenViewModel
 import com.osman.bitirmeprojesi.views.DetailsScreen
+import com.osman.bitirmeprojesi.views.FavoritesScreen
 import com.osman.bitirmeprojesi.views.HomeScreen
 import com.osman.bitirmeprojesi.views.LoginScreen
 import com.osman.bitirmeprojesi.views.PaymentScreen
@@ -20,10 +22,10 @@ import com.osman.bitirmeprojesi.views.PaymentScreen
 
 @Composable
 fun Navigations(loginScreenViewModel: LoginScreenViewModel,homeScreenViewModel: HomeScreenViewModel,
-                detailsScreenViewModel: DetailsScreenViewModel) {
+                detailsScreenViewModel: DetailsScreenViewModel,favoritesScreenViewModel: FavoritesScreenViewModel) {
    val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "homeScreen") {
+    NavHost(navController = navController, startDestination = "loginscreen") {
         composable("loginscreen") {
             LoginScreen(navController, loginScreenViewModel)
         }
@@ -36,8 +38,12 @@ fun Navigations(loginScreenViewModel: LoginScreenViewModel,homeScreenViewModel: 
             DetailsScreen(food = food, detailsScreenViewModel,navController )
         }
         composable("paymentScreen") {
-            PaymentScreen()
+            PaymentScreen(navController)
         }
+        composable("favoritesScreen") {
+            FavoritesScreen(navController,favoritesScreenViewModel,homeScreenViewModel)
+        }
+
     }
 
 

@@ -1,29 +1,39 @@
 package com.osman.bitirmeprojesi.views
 
+import BottomNavigationBar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Card
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -35,8 +45,13 @@ import com.skydoves.landscapist.glide.GlideImage
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(homeScreenViewModel: HomeScreenViewModel,navController: NavController) {
+fun HomeScreen(homeScreenViewModel: HomeScreenViewModel, navController: NavController) {
     val allFoodList = homeScreenViewModel.allFoodList.observeAsState(listOf())
+
+    // Get the favorites list from the ViewModel
+    val favoriteFoods = remember { mutableStateListOf<Food>().apply {
+        addAll(homeScreenViewModel.getFavoriteFoods())
+    }}
 
     // Trigger the initial data load
     LaunchedEffect(key1 = true) {
@@ -44,7 +59,10 @@ fun HomeScreen(homeScreenViewModel: HomeScreenViewModel,navController: NavContro
     }
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text(text = "Welcome") }) }
+        topBar = { TopAppBar(title = { Text(text = "Welcome") }) },
+        bottomBar = {
+            BottomNavigationBar(navController)
+        }
     ) { paddingValues ->
         LazyVerticalGrid(
             columns = GridCells.Fixed(2), // Set 2 items per row
@@ -56,45 +74,122 @@ fun HomeScreen(homeScreenViewModel: HomeScreenViewModel,navController: NavContro
         ) {
             items(count = allFoodList.value.count()) { index ->
                 val food = allFoodList.value[index]
+
+                // Manage the quantity state using remember
+                var quantity by remember { mutableStateOf(0) } // Initial quantity set to 0
+
+                // Check if the current food item is a favorite
+                val isFavorite = remember { mutableStateOf(favoriteFoods.contains(food)) }
+
+                // Convert price from String to Double for calculation
+                val price = food.yemek_fiyat.toDoubleOrNull() ?: 0.0
+                val totalPrice = quantity * price
+
                 Card(
                     modifier = Modifier
                         .padding(5.dp)
                         .background(colorResource(id = R.color.logintfColor))
                 ) {
-                    Column(
-                        verticalArrangement = Arrangement.SpaceEvenly,
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.padding(8.dp)
-                    ) {
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        // The main content of the card
+                        Column(
+                            verticalArrangement = Arrangement.SpaceEvenly,
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.padding(8.dp)
+                        ) {
+                            // Construct the full image URL
+                            val imageUrl = "http://kasimadalan.pe.hu/yemekler/resimler/${food.yemek_resim_adi}"
 
-                        // Construct the full image URL
-                        val imageUrl = "http://kasimadalan.pe.hu/yemekler/resimler/${food.yemek_resim_adi}"
-
-                        // Load the image using Glide
-                        GlideImage(
-                            imageModel = { imageUrl },
-                            modifier = Modifier
-                                .height(100.dp) // Adjust size as needed
-                                .fillMaxWidth().clickable {
-                                    // Serialize the Food object to JSON
-                                    val foodJson = Gson().toJson(food)
-                                    // Navigate to the details screen with the JSON parameter
-                                    navController.navigate("detailsScreen/$foodJson")
+                            // Load the image using Glide
+                            GlideImage(
+                                imageModel = { imageUrl },
+                                modifier = Modifier
+                                    .height(80.dp) // Adjust size as needed
+                                    .width(80.dp)
+                                    .clickable {
+                                        // Serialize the Food object to JSON
+                                        val foodJson = Gson().toJson(food)
+                                        // Navigate to the details screen with the JSON parameter
+                                        navController.navigate("detailsScreen/$foodJson")
+                                    },
+                                loading = {
+                                    CircularProgressIndicator()
                                 },
-                            loading = {
-                                // Optional: Show a loading indicator while the image is loading
-                                CircularProgressIndicator()
-                            },
-                            failure = {
-                                // Optional: Show an error indicator or placeholder if image loading fails
-                                Text(text = "Image failed to load")
-                            }
-                        )
+                                failure = {
+                                    Text(text = "Image failed to load")
+                                }
+                            )
 
-                        Text(text = food.yemek_adi)
+                            Text(text = food.yemek_adi)
+
+                            // Display total price
+                            Text(text = "Fiyat ${String.format("%.2f", totalPrice)} ₺")
+
+                            // Row to display minus icon, quantity, and plus icon
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                IconButton(
+                                    onClick = {
+                                        if (quantity > 1) quantity-- // Decrease quantity
+                                    }
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Clear,
+                                        contentDescription = "Decrease quantity"
+                                    )
+                                }
+
+                                Text(text = quantity.toString())
+
+                                IconButton(
+                                    onClick = {
+                                        quantity++ // Increase quantity
+                                    }
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Add,
+                                        contentDescription = "Increase quantity"
+                                    )
+                                }
+                            }
+                        }
+
+                        // Heart icon at the top-right corner
+                        IconButton(
+                            onClick = {
+                                if (isFavorite.value) {
+                                    // Remove from favorites
+                                    favoriteFoods.remove(food)
+                                    isFavorite.value = false
+                                } else {
+                                    // Add to favorites
+                                    favoriteFoods.add(food)
+                                    isFavorite.value = true
+                                }
+
+                                // Save the updated favorites list
+                                homeScreenViewModel.saveFavoriteFoods(favoriteFoods)
+                            },
+                            modifier = Modifier
+                                .align(Alignment.TopEnd)
+                                .padding(8.dp)
+                        ) {
+                            Icon(
+                                imageVector = if (isFavorite.value) Icons.Filled.Favorite else Icons.Default.FavoriteBorder,
+                                contentDescription = if (isFavorite.value) "Remove from favorites" else "Add to favorites",
+                                tint = Color.Red
+                            )
+                        }
                     }
                 }
             }
         }
     }
 }
+
+
+
+
