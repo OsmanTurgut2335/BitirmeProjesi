@@ -33,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
@@ -87,8 +88,8 @@ fun HomeScreen(homeScreenViewModel: HomeScreenViewModel, navController: NavContr
 
                 Card(
                     modifier = Modifier
-                        .padding(5.dp)
-                        .background(colorResource(id = R.color.logintfColor))
+                        .padding(5.dp).shadow(2.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White)
                 ) {
                     Box(modifier = Modifier.fillMaxWidth()) {
                         // The main content of the card
@@ -104,8 +105,8 @@ fun HomeScreen(homeScreenViewModel: HomeScreenViewModel, navController: NavContr
                             GlideImage(
                                 imageModel = { imageUrl },
                                 modifier = Modifier
-                                    .height(80.dp) // Adjust size as needed
-                                    .width(80.dp)
+                                    .height(120.dp) // Adjust size as needed
+                                    .width(120.dp)
                                     .clickable {
                                         // Serialize the Food object to JSON
                                         val foodJson = Gson().toJson(food)
@@ -123,7 +124,8 @@ fun HomeScreen(homeScreenViewModel: HomeScreenViewModel, navController: NavContr
                             Text(text = food.yemek_adi)
 
                             // Display total price
-                            Text(text = "Fiyat ${String.format("%.2f", totalPrice)} ₺")
+                            Text(text = if( quantity <=1) "Fiyat : ${food.yemek_fiyat}" else "Fiyat : ${String.format(totalPrice.toString()
+                            )} ₺")
 
                             // Row to display minus icon, quantity, and plus icon
                             Row(

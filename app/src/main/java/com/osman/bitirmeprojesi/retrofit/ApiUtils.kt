@@ -9,6 +9,7 @@ class ApiUtils {
     companion object{
         val ALL_FOOD_BASE_URL = "http://kasimadalan.pe.hu/"
 
+
         fun getFoodDao():FoodDao {
             return RetrofitClient.getClient(ALL_FOOD_BASE_URL).create(FoodDao::class.java)
         }

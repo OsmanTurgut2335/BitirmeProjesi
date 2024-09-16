@@ -17,6 +17,7 @@ import com.osman.bitirmeprojesi.viewmodels.DetailsScreenViewModel
 import com.osman.bitirmeprojesi.viewmodels.FavoritesScreenViewModel
 import com.osman.bitirmeprojesi.viewmodels.HomeScreenViewModel
 import com.osman.bitirmeprojesi.viewmodels.LoginScreenViewModel
+import com.osman.bitirmeprojesi.viewmodels.PaymentScreenViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,13 +26,13 @@ class MainActivity : ComponentActivity() {
     val homeScreenViewModel : HomeScreenViewModel by viewModels ()
     val detailsScreenViewModel : DetailsScreenViewModel by viewModels()
     val favoritesScreenViewModel : FavoritesScreenViewModel by viewModels()
-
+    val paymentScreenViewModel : PaymentScreenViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             BitirmeProjesiTheme {
-            Navigations(loginScreenViewModel,homeScreenViewModel,detailsScreenViewModel,favoritesScreenViewModel)
+            Navigations(loginScreenViewModel,homeScreenViewModel,detailsScreenViewModel,favoritesScreenViewModel,paymentScreenViewModel)
             }
         }
     }

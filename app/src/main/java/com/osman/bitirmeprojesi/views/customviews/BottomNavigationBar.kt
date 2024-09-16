@@ -65,8 +65,9 @@ fun BottomNavigationBar(navController: NavController) {
             label = { Text("Cart") },
             selected = currentRoute == "paymentScreen",
             onClick = {
+                val username = "osman_turgut" // Replace with your actual username variable
                 if (currentRoute != "paymentScreen") {
-                    navController.navigate("paymentScreen") {
+                    navController.navigate("paymentScreen/$username") {
                         popUpTo(navController.graph.startDestinationId) { saveState = true }
                         launchSingleTop = true
                         restoreState = true
@@ -74,5 +75,6 @@ fun BottomNavigationBar(navController: NavController) {
                 }
             }
         )
+
     }
 }

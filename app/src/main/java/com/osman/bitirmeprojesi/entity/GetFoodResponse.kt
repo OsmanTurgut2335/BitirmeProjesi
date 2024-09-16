@@ -6,4 +6,5 @@ import com.google.gson.annotations.SerializedName
 
 data class GetFoodResponse (@SerializedName("yemekler") var foodList: List<Food> ,var success:Int){
 
+
 }
