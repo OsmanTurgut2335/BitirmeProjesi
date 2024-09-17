@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.gson.Gson
@@ -88,7 +89,9 @@ fun HomeScreen(homeScreenViewModel: HomeScreenViewModel, navController: NavContr
 
                 Card(
                     modifier = Modifier
-                        .padding(5.dp).shadow(2.dp),
+                        .padding(5.dp)
+                        .shadow(elevation = 2.dp)
+                        .background(Color.Gray),
                     colors = CardDefaults.cardColors(containerColor = Color.White)
                 ) {
                     Box(modifier = Modifier.fillMaxWidth()) {
@@ -124,8 +127,8 @@ fun HomeScreen(homeScreenViewModel: HomeScreenViewModel, navController: NavContr
                             Text(text = food.yemek_adi)
 
                             // Display total price
-                            Text(text = if( quantity <=1) "Fiyat : ${food.yemek_fiyat}" else "Fiyat : ${String.format(totalPrice.toString()
-                            )} ₺")
+                            Text(text = if( quantity <=1) "Fiyat : ${food.yemek_fiyat} ₺"
+                            else "Fiyat : ${String.format(totalPrice.toString()) } ₺")
 
                             // Row to display minus icon, quantity, and plus icon
                             Row(
@@ -139,7 +142,7 @@ fun HomeScreen(homeScreenViewModel: HomeScreenViewModel, navController: NavContr
                                     }
                                 ) {
                                     Icon(
-                                        imageVector = Icons.Default.Clear,
+                                        painter = painterResource(id = R.drawable.baseline_remove_24),
                                         contentDescription = "Decrease quantity"
                                     )
                                 }

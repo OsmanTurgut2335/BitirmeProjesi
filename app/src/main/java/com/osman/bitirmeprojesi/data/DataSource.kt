@@ -2,8 +2,16 @@
 
     import android.content.Context
     import android.content.SharedPreferences
+    import androidx.compose.foundation.clickable
+    import androidx.compose.foundation.layout.height
+    import androidx.compose.foundation.layout.width
+    import androidx.compose.material3.CircularProgressIndicator
+    import androidx.compose.material3.Text
     import androidx.compose.runtime.Composable
+    import androidx.compose.ui.Modifier
     import androidx.compose.ui.platform.LocalContext
+    import androidx.compose.ui.unit.dp
+    import androidx.navigation.NavController
     import com.google.firebase.auth.FirebaseAuth
     import com.google.firebase.auth.FirebaseUser
     import dagger.hilt.android.qualifiers.ApplicationContext
@@ -12,6 +20,7 @@
     import com.google.gson.reflect.TypeToken
     import com.osman.bitirmeprojesi.entity.Food
     import com.osman.bitirmeprojesi.retrofit.FoodDao
+    import com.skydoves.landscapist.glide.GlideImage
     import kotlinx.coroutines.Dispatchers
     import kotlinx.coroutines.withContext
     import javax.inject.Inject
@@ -70,6 +79,26 @@
             } else {
                 emptyList() // Return an empty list if there's no data
             }
+        }
+
+        @Composable
+        fun LoadGlideImage(imageUrl:Any, modifier: Modifier, navController: NavController, food: Food){
+            GlideImage(
+                imageModel = { imageUrl },
+                modifier =modifier
+                    .clickable {
+                        // Serialize the Food object to JSON
+                        val foodJson = Gson().toJson(food)
+                        // Navigate to the details screen with the JSON parameter
+                        navController.navigate("detailsScreen/$foodJson")
+                    },
+                loading = {
+                    CircularProgressIndicator()
+                },
+                failure = {
+                    Text(text = "Image failed to load")
+                }
+            )
         }
 
 

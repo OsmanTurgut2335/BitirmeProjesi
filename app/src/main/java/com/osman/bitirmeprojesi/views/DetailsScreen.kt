@@ -31,10 +31,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.osman.bitirmeprojesi.R
 import com.osman.bitirmeprojesi.entity.Food
 import com.osman.bitirmeprojesi.viewmodels.DetailsScreenViewModel
+import com.osman.bitirmeprojesi.views.customviews.Chip
 import com.skydoves.landscapist.glide.GlideImage
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,7 +69,7 @@ fun DetailsScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 // Display food details
-                Text(text = "Details of ${food.yemek_adi}", modifier = Modifier.padding(bottom = 8.dp))
+                Text(text = "${food.yemek_adi}", modifier = Modifier.padding(bottom = 8.dp))
 
                 GlideImage(
                     imageModel = { imageUrl },
@@ -77,7 +80,7 @@ fun DetailsScreen(
                     failure = { Text(text = "Image failed to load") }
                 )
 
-                Text(text = "Fiyat ${String.format("%.2f", totalPrice)} ₺", modifier = Modifier.padding(top = 8.dp))
+                Text(text = "Fiyat ${totalPrice.toInt()} ₺", modifier = Modifier.padding(top = 8.dp))
 
                 // Row to handle quantity selection
                 Row(
@@ -86,7 +89,10 @@ fun DetailsScreen(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     IconButton(onClick = { if (quantity > 1) quantity-- }) {
-                        Icon(imageVector = Icons.Default.Clear, contentDescription = "Decrease quantity")
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_remove_24),
+                            contentDescription = "Decrease quantity"
+                        )
                     }
 
                     Text(text = quantity.toString())
@@ -97,7 +103,7 @@ fun DetailsScreen(
                 }
 
                 // Button to add food to cart
-                Button(onClick = {
+                Chip(onClick = {
                     detailsScreenViewModel.addToCart(
                         food = food,
                         quantity = quantity,
@@ -105,9 +111,8 @@ fun DetailsScreen(
                         onSuccess = { message -> snackbarMessage = message }, // Success callback
                         onFailure = { errorMessage -> snackbarMessage = errorMessage } // Failure callback
                     )
-                }) {
-                    Text(text = "Sepete Ekle")
-                }
+                },
+                    content = "Sepete Ekle")
             }
         }
     )

@@ -17,8 +17,8 @@ fun BottomNavigationBar(navController: NavController) {
 
     NavigationBar {
         NavigationBarItem(
-            icon = { Icon(Icons.Filled.Home, contentDescription = "Home") },
-            label = { Text("Home") },
+            icon = { Icon(Icons.Filled.Home, contentDescription = "Ana Ekran") },
+            label = { Text("Ana Ekran") },
             selected = currentRoute == "homeScreen",
             onClick = {
                 if (currentRoute != "homeScreen") {
@@ -31,8 +31,8 @@ fun BottomNavigationBar(navController: NavController) {
             }
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Filled.Favorite, contentDescription = "Favorites") },
-            label = { Text("Favorites") },
+            icon = { Icon(Icons.Filled.Favorite, contentDescription = "Favoriler") },
+            label = { Text("Favoriler") },
             selected = currentRoute == "favoritesScreen",
             onClick = {
                 if (currentRoute != "favoritesScreen") {
@@ -61,8 +61,8 @@ fun BottomNavigationBar(navController: NavController) {
         )*/
 
         NavigationBarItem(
-            icon = { Icon(Icons.Filled.ShoppingCart, contentDescription = "Cart") },
-            label = { Text("Cart") },
+            icon = { Icon(Icons.Filled.ShoppingCart, contentDescription = "Sepet") },
+            label = { Text("Sepet") },
             selected = currentRoute == "paymentScreen",
             onClick = {
                 val username = "osman_turgut" // Replace with your actual username variable

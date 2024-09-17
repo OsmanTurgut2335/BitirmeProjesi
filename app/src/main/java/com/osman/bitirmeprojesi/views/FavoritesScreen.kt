@@ -30,10 +30,9 @@ import com.skydoves.landscapist.glide.GlideImage
 fun FavoritesScreen(
     navController: NavController,
     favoritesScreenViewModel: FavoritesScreenViewModel,
-    homeScreenViewModel: HomeScreenViewModel
 ) {
     // Get the list of favorite foods from HomeScreenViewModel
-    val favoriteFoods = homeScreenViewModel.getFavoriteFoods()
+    val favoriteFoods = favoritesScreenViewModel.getFavoriteFoods()
 
     Scaffold(
         bottomBar = { BottomNavigationBar(navController = navController) },

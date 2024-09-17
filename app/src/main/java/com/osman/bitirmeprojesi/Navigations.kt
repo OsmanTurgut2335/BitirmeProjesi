@@ -53,7 +53,7 @@ fun Navigations(loginScreenViewModel: LoginScreenViewModel,homeScreenViewModel: 
         }
 
         composable("favoritesScreen") {
-            FavoritesScreen(navController,favoritesScreenViewModel,homeScreenViewModel)
+            FavoritesScreen(navController,favoritesScreenViewModel)
         }
 
     }
