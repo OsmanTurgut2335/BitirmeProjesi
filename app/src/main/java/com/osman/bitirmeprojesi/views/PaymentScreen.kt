@@ -11,6 +11,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
 import com.osman.bitirmeprojesi.R
@@ -47,7 +49,18 @@ fun PaymentScreen(paymentScreenViewModel: PaymentScreenViewModel, navController:
         acc + price
     }
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Cart Items") }) },
+        topBar = { TopAppBar(title = { Text("Cart Items") },
+            actions = {
+                // Trash icon button
+                IconButton(onClick = {
+                    // Navigate back to HomeScreen when trash icon is clicked
+                    navController.navigate("homeScreen") {
+                        popUpTo("homeScreen") { inclusive = true }
+                    }
+                }) {
+                    Icon(imageVector = Icons.Default.Clear, contentDescription = "Delete")
+                }
+            }) },
         bottomBar = { BottomNavigationBar(navController = navController) }
     ) { paddingValues ->
         Column(
@@ -188,11 +201,3 @@ fun CartItemCard(item: CartFood, onDeleteClick: () -> Unit) {
     }
 }
 
-/*
- // Calculate the total price of the cart items
-    val totalPrice = cartItemsFinal.fold(0f) { acc, item ->
-        val price = item.yemek_fiyat.toFloatOrNull() ?: 0f
-        val quantity = item.yemek_siparis_adet.toFloatOrNull() ?: 0f
-        acc + (price * quantity)
-    }
- */

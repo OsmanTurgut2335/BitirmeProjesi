@@ -59,7 +59,22 @@ fun DetailsScreen(
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         bottomBar = { BottomNavigationBar(navController = navController) },
-        topBar = { TopAppBar(title = { Text(text = "Ürün Detayları") }) },
+        topBar = {
+            TopAppBar(
+                title = { Text(text = "Ürün Detayları") },
+                actions = {
+                    // Trash icon button
+                    IconButton(onClick = {
+                        // Navigate back to HomeScreen when trash icon is clicked
+                        navController.navigate("homeScreen") {
+                            popUpTo("homeScreen") { inclusive = true }
+                        }
+                    }) {
+                        Icon(imageVector = Icons.Default.Clear, contentDescription = "Delete")
+                    }
+                }
+            )
+        },
         content = { paddingValues ->
             Column(
                 modifier = Modifier

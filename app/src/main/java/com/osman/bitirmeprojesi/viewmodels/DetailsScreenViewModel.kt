@@ -37,7 +37,7 @@ class DetailsScreenViewModel @Inject constructor() : ViewModel() {
 
                 // Check the response
                 if (response.success == 1) {
-                    onSuccess("Item added to the cart successfully!")
+                    onSuccess("Sepete eklendi!")
                 } else {
                     onFailure("Failed to add item to the cart. Response success value: ${response.success}")
                 }

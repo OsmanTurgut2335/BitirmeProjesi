@@ -10,12 +10,17 @@
 
     @HiltViewModel
     class LoginScreenViewModel @Inject constructor(var repository: Repository) : ViewModel(){
-        private val _loginResult = MutableLiveData<Result<FirebaseUser>>()
-        val loginResult: LiveData<Result<FirebaseUser>> = _loginResult
+        private val _loginResult = MutableLiveData<Result<FirebaseUser>?>()
+        val loginResult: LiveData<Result<FirebaseUser>?> = _loginResult
 
              fun login(username :String, password:String){
                 repository.login(username, password) { result ->
                     _loginResult.postValue(result)
     }
     }
+
+        // Function to reset the login result
+        fun clearLoginResult() {
+            _loginResult.value = null
+        }
     }

@@ -27,7 +27,7 @@ fun Navigations(loginScreenViewModel: LoginScreenViewModel,homeScreenViewModel: 
                 paymentScreenViewModel: PaymentScreenViewModel) {
    val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "homeScreen") {
+    NavHost(navController = navController, startDestination = "loginscreen") {
         composable("loginscreen") {
             LoginScreen(navController, loginScreenViewModel)
         }

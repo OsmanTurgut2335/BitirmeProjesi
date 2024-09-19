@@ -9,5 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="logintfColor">#FFB3E5FC</color>
     <color name="buttonBackground">#FF9FA8DA</color>
-
+    <color name="redBackground">#FFD50000</color>
+    <color name="bottomNavColor">#FFF5F5DC</color>
 </resources>

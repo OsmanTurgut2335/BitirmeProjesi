@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.*
@@ -36,7 +37,18 @@ fun FavoritesScreen(
 
     Scaffold(
         bottomBar = { BottomNavigationBar(navController = navController) },
-        topBar = { TopAppBar(title = { Text(text = "Favoriler") }) }
+        topBar = { TopAppBar(title = { Text(text = "Favoriler") },
+            actions = {
+                // Trash icon button
+                IconButton(onClick = {
+                    // Navigate back to HomeScreen when trash icon is clicked
+                    navController.navigate("homeScreen") {
+                        popUpTo("homeScreen") { inclusive = true }
+                    }
+                }) {
+                    Icon(imageVector = Icons.Default.Clear, contentDescription = "Delete")
+                }
+            }) }
     ) { paddingValues ->
         if (favoriteFoods.isNotEmpty()) {
             LazyVerticalGrid(
@@ -51,19 +63,27 @@ fun FavoritesScreen(
                     Card(
                         modifier = Modifier
                             .padding(5.dp)
+                            .fillMaxWidth()
                             .background(colorResource(id = R.color.logintfColor))
                             .clickable {
                                 // Serialize the Food object to JSON
                                 val foodJson = Gson().toJson(food)
                                 // Navigate to the details screen with the JSON parameter
                                 navController.navigate("detailsScreen/$foodJson")
-                            }
+                            },
+                        colors = CardDefaults.cardColors(containerColor = Color.White),
+                        elevation = CardDefaults.cardElevation(4.dp)
                     ) {
-                        Box(modifier = Modifier.fillMaxWidth()) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
                             // The main content of the card
                             Column(
-                                verticalArrangement = Arrangement.SpaceEvenly,
                                 horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center,
                                 modifier = Modifier.padding(8.dp)
                             ) {
                                 // Construct the full image URL
@@ -73,8 +93,8 @@ fun FavoritesScreen(
                                 GlideImage(
                                     imageModel = { imageUrl },
                                     modifier = Modifier
-                                        .height(80.dp)
-                                        .width(80.dp),
+                                        .height(100.dp)
+                                        .width(100.dp),
                                     loading = {
                                         CircularProgressIndicator()
                                     },
@@ -83,7 +103,9 @@ fun FavoritesScreen(
                                     }
                                 )
 
-                                Text(text = food.yemek_adi)
+                                Spacer(modifier = Modifier.height(8.dp))
+
+                                Text(text = food.yemek_adi, style = MaterialTheme.typography.bodyMedium)
                             }
                         }
                     }
@@ -102,3 +124,4 @@ fun FavoritesScreen(
         }
     }
 }
+

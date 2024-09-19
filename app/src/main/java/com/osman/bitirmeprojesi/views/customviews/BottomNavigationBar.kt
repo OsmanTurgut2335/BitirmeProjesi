@@ -8,16 +8,20 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.colorResource
 import androidx.navigation.NavController
+import com.osman.bitirmeprojesi.R
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {
     // Get the current route
     val currentRoute = navController.currentBackStackEntry?.destination?.route
 
-    NavigationBar {
+    NavigationBar (containerColor = colorResource(id = R.color.bottomNavColor)){
         NavigationBarItem(
-            icon = { Icon(Icons.Filled.Home, contentDescription = "Ana Ekran") },
+            icon = { Icon(Icons.Filled.Home, contentDescription = "Ana Ekran",
+                tint = colorResource(id = R.color.redBackground
+            )) },
             label = { Text("Ana Ekran") },
             selected = currentRoute == "homeScreen",
             onClick = {
@@ -31,7 +35,9 @@ fun BottomNavigationBar(navController: NavController) {
             }
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Filled.Favorite, contentDescription = "Favoriler") },
+            icon = { Icon(Icons.Filled.Favorite, contentDescription = "Favoriler" ,
+                tint = colorResource(id = R.color.redBackground
+                    ))},
             label = { Text("Favoriler") },
             selected = currentRoute == "favoritesScreen",
             onClick = {
@@ -61,7 +67,9 @@ fun BottomNavigationBar(navController: NavController) {
         )*/
 
         NavigationBarItem(
-            icon = { Icon(Icons.Filled.ShoppingCart, contentDescription = "Sepet") },
+            icon = { Icon(Icons.Filled.ShoppingCart, contentDescription = "Sepet" ,
+                tint = colorResource(id = R.color.redBackground
+                    )) },
             label = { Text("Sepet") },
             selected = currentRoute == "paymentScreen",
             onClick = {

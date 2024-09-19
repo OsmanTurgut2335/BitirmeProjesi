@@ -32,24 +32,38 @@ import com.osman.bitirmeprojesi.R
 import com.osman.bitirmeprojesi.viewmodels.LoginScreenViewModel
 import kotlin.math.log
 
+import com.google.firebase.auth.FirebaseAuth
+import androidx.compose.runtime.LaunchedEffect
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(navController: NavController, loginScreenViewModel: LoginScreenViewModel) {
-    var tfUsername = remember { mutableStateOf("") }
-    var tfPassword = remember { mutableStateOf("") }
+    val tfUsername = remember { mutableStateOf("") }
+    val tfPassword = remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
 
-    var passwordVisible by remember { mutableStateOf(false) } // State to control password visibility
-    
     // Observe the login result from the ViewModel
     val loginResult by loginScreenViewModel.loginResult.observeAsState()
 
     // Snackbar state
     val snackbarHostState = remember { androidx.compose.material3.SnackbarHostState() }
 
+    // Check if the user is already logged in (only run on first composition)
+    LaunchedEffect(key1 = true) {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        if (currentUser != null) {
+            // If user is logged in, navigate directly to the home screen
+            navController.navigate("homeScreen") {
+                popUpTo(navController.graph.startDestinationId) {
+                    inclusive = true
+                }
+            }
+        }
+    }
+
     Scaffold(
         topBar = { TopAppBar(title = { Text(text = "Giriş Ekranına Hoşgeldiniz") }) },
         snackbarHost = { androidx.compose.material3.SnackbarHost(snackbarHostState) }
-
     ) { paddingValues ->
         Column(
             Modifier
@@ -58,19 +72,18 @@ fun LoginScreen(navController: NavController, loginScreenViewModel: LoginScreenV
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "adsdsa")
             TextField(
                 colors = TextFieldDefaults.textFieldColors(containerColor = colorResource(id = R.color.logintfColor)),
                 value = tfUsername.value,
                 onValueChange = { tfUsername.value = it },
-                label = { Text(text = "E mail  ") }
+                label = { Text(text = "E-mail") }
             )
 
             TextField(
                 colors = TextFieldDefaults.textFieldColors(containerColor = colorResource(id = R.color.logintfColor)),
                 value = tfPassword.value,
                 onValueChange = { tfPassword.value = it },
-                label = { Text(text = "Parola ") },
+                label = { Text(text = "Parola") },
                 visualTransformation = if (passwordVisible) androidx.compose.ui.text.input.VisualTransformation.None
                 else androidx.compose.ui.text.input.PasswordVisualTransformation(),
                 trailingIcon = {
@@ -84,8 +97,6 @@ fun LoginScreen(navController: NavController, loginScreenViewModel: LoginScreenV
                 }
             )
 
-
-
             Button(onClick = {
                 loginScreenViewModel.login(tfUsername.value, tfPassword.value)
             }) {
@@ -97,7 +108,15 @@ fun LoginScreen(navController: NavController, loginScreenViewModel: LoginScreenV
                 when {
                     result.isSuccess -> {
                         // Navigate to another screen on successful login
-                        navController.navigate("homeScreen")
+                        navController.navigate("homeScreen") {
+                            popUpTo(navController.graph.startDestinationId) {
+
+                                inclusive = true
+                            }
+                        }
+
+
+                        loginScreenViewModel.clearLoginResult()
                     }
                     result.isFailure -> {
                         // Show error message
@@ -110,6 +129,9 @@ fun LoginScreen(navController: NavController, loginScreenViewModel: LoginScreenV
                     }
                 }
             }
+
+
         }
     }
 }
+

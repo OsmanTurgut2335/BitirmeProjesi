@@ -6,7 +6,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,6 +22,8 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -38,11 +42,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import com.osman.bitirmeprojesi.R
 import com.osman.bitirmeprojesi.entity.Food
 import com.osman.bitirmeprojesi.viewmodels.HomeScreenViewModel
+import com.osman.bitirmeprojesi.views.customviews.CustomTopBar
+import com.osman.bitirmeprojesi.views.customviews.SortCriteria
 import com.skydoves.landscapist.glide.GlideImage
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,14 +62,45 @@ fun HomeScreen(homeScreenViewModel: HomeScreenViewModel, navController: NavContr
     val favoriteFoods = remember { mutableStateListOf<Food>().apply {
         addAll(homeScreenViewModel.getFavoriteFoods())
     }}
+    var expanded by remember { mutableStateOf(false) } // To handle the dropdown state
+    var sortExpanded by remember { mutableStateOf(false) } // For the sort dropdown
+    var sortCriteria by remember { mutableStateOf<SortCriteria?>(null) }
 
     // Trigger the initial data load
     LaunchedEffect(key1 = true) {
         homeScreenViewModel.loadAllFood()
     }
 
+    // Sort the list based on selected criteria
+    val sortedFoodList = remember(allFoodList.value, sortCriteria) {
+        println("Sorting criteria: $sortCriteria")
+        when (sortCriteria) {
+            SortCriteria.Name -> allFoodList.value.sortedBy { it.yemek_adi }
+            SortCriteria.PriceAscending -> allFoodList.value.sortedBy { it.yemek_fiyat.toDoubleOrNull() ?: 0.0 }
+            SortCriteria.PriceDescending -> allFoodList.value.sortedByDescending { it.yemek_fiyat.toDoubleOrNull() ?: 0.0 }
+            else -> allFoodList.value
+
+        }
+
+    }
+
     Scaffold(
-        topBar = { TopAppBar(title = { Text(text = "Welcome") }) },
+        topBar = {
+            CustomTopBar(
+                title = "Welcome",
+                navController = navController,
+                sortExpanded = sortExpanded,
+                onSortExpandedChange = { sortExpanded = it },
+                expanded = expanded,
+                onExpandedChange = { expanded = it },
+                allFoodList = allFoodList.value,
+                onSortSelected = { criteria ->
+                    println("Sort selected: $criteria") // Debug statement
+                    sortCriteria = criteria
+
+                }
+            )
+        },
         bottomBar = {
             BottomNavigationBar(navController)
         }
@@ -74,8 +113,8 @@ fun HomeScreen(homeScreenViewModel: HomeScreenViewModel, navController: NavContr
             verticalArrangement = Arrangement.spacedBy(10.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            items(count = allFoodList.value.count()) { index ->
-                val food = allFoodList.value[index]
+            items(count = sortedFoodList.count()) { index ->
+                val food = sortedFoodList[index]
 
                 // Manage the quantity state using remember
                 var quantity by remember { mutableStateOf(0) } // Initial quantity set to 0
@@ -91,7 +130,7 @@ fun HomeScreen(homeScreenViewModel: HomeScreenViewModel, navController: NavContr
                     modifier = Modifier
                         .padding(5.dp)
                         .shadow(elevation = 2.dp)
-                        .background(Color.Gray),
+                        .background(color = colorResource(id = R.color.redBackground)),
                     colors = CardDefaults.cardColors(containerColor = Color.White)
                 ) {
                     Box(modifier = Modifier.fillMaxWidth()) {
@@ -108,8 +147,8 @@ fun HomeScreen(homeScreenViewModel: HomeScreenViewModel, navController: NavContr
                             GlideImage(
                                 imageModel = { imageUrl },
                                 modifier = Modifier
-                                    .height(120.dp) // Adjust size as needed
-                                    .width(120.dp)
+                                    .height(100.dp) // Adjust size as needed
+                                    .width(100.dp)
                                     .clickable {
                                         // Serialize the Food object to JSON
                                         val foodJson = Gson().toJson(food)
@@ -128,7 +167,7 @@ fun HomeScreen(homeScreenViewModel: HomeScreenViewModel, navController: NavContr
 
                             // Display total price
                             Text(text = if( quantity <=1) "Fiyat : ${food.yemek_fiyat} ₺"
-                            else "Fiyat : ${String.format(totalPrice.toString()) } ₺")
+                            else "Fiyat : ${String.format(totalPrice.toString()) } ₺",)
 
                             // Row to display minus icon, quantity, and plus icon
                             Row(
