@@ -82,7 +82,7 @@
         }
 
         @Composable
-        fun LoadGlideImage(imageUrl:Any, modifier: Modifier, navController: NavController, food: Food){
+        fun LoadGlideImage(imageUrl:Any, modifier: Modifier, navController: NavController, food: Food) {
             GlideImage(
                 imageModel = { imageUrl },
                 modifier =modifier
@@ -99,6 +99,8 @@
                     Text(text = "Image failed to load")
                 }
             )
+
+
         }
 
 

@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.colorResource
 import androidx.navigation.NavController
 import com.osman.bitirmeprojesi.R
+import com.osman.bitirmeprojesi.views.customviews.CustomText
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {
@@ -22,7 +23,7 @@ fun BottomNavigationBar(navController: NavController) {
             icon = { Icon(Icons.Filled.Home, contentDescription = "Ana Ekran",
                 tint = colorResource(id = R.color.redBackground
             )) },
-            label = { Text("Ana Ekran") },
+            label = { CustomText(content = "Ana Ekran") },
             selected = currentRoute == "homeScreen",
             onClick = {
                 if (currentRoute != "homeScreen") {
@@ -38,7 +39,7 @@ fun BottomNavigationBar(navController: NavController) {
             icon = { Icon(Icons.Filled.Favorite, contentDescription = "Favoriler" ,
                 tint = colorResource(id = R.color.redBackground
                     ))},
-            label = { Text("Favoriler") },
+            label = { CustomText(content = "Favoriler") },
             selected = currentRoute == "favoritesScreen",
             onClick = {
                 if (currentRoute != "favoritesScreen") {
@@ -70,7 +71,7 @@ fun BottomNavigationBar(navController: NavController) {
             icon = { Icon(Icons.Filled.ShoppingCart, contentDescription = "Sepet" ,
                 tint = colorResource(id = R.color.redBackground
                     )) },
-            label = { Text("Sepet") },
+            label = { CustomText(content = "Sepet") },
             selected = currentRoute == "paymentScreen",
             onClick = {
                 val username = "osman_turgut" // Replace with your actual username variable

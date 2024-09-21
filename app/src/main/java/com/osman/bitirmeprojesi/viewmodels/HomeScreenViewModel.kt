@@ -13,7 +13,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(val repository: Repository,) : ViewModel(){
     var allFoodList = MutableLiveData<List<Food>>()
-    var favoriteFoodsList =MutableLiveData<List<Food>>()
+
 
     init {
         loadAllFood()
@@ -28,6 +28,7 @@ class HomeScreenViewModel @Inject constructor(val repository: Repository,) : Vie
 
         }
     }
+
     // Method to save the favorite foods list
     fun saveFavoriteFoods(favoriteFoods: List<Food>) {
         repository.saveFavoriteFoods(favoriteFoods)

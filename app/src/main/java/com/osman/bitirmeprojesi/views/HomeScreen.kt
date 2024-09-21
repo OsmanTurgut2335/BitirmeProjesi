@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -49,11 +50,14 @@ import com.google.gson.Gson
 import com.osman.bitirmeprojesi.R
 import com.osman.bitirmeprojesi.entity.Food
 import com.osman.bitirmeprojesi.viewmodels.HomeScreenViewModel
+import com.osman.bitirmeprojesi.views.customviews.AnimatedPreloader
+import com.osman.bitirmeprojesi.views.customviews.CustomHeaderText
+import com.osman.bitirmeprojesi.views.customviews.CustomText
 import com.osman.bitirmeprojesi.views.customviews.CustomTopBar
 import com.osman.bitirmeprojesi.views.customviews.SortCriteria
 import com.skydoves.landscapist.glide.GlideImage
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun HomeScreen(homeScreenViewModel: HomeScreenViewModel, navController: NavController) {
     val allFoodList = homeScreenViewModel.allFoodList.observeAsState(listOf())
@@ -87,7 +91,7 @@ fun HomeScreen(homeScreenViewModel: HomeScreenViewModel, navController: NavContr
     Scaffold(
         topBar = {
             CustomTopBar(
-                title = "Welcome",
+                title = "Hoşgeldiniz",
                 navController = navController,
                 sortExpanded = sortExpanded,
                 onSortExpandedChange = { sortExpanded = it },
@@ -156,18 +160,24 @@ fun HomeScreen(homeScreenViewModel: HomeScreenViewModel, navController: NavContr
                                         navController.navigate("detailsScreen/$foodJson")
                                     },
                                 loading = {
-                                    CircularProgressIndicator()
+
+                                   // CircularProgressIndicator()
+
+                                    AnimatedPreloader(modifier = Modifier.size(200.dp))
                                 },
                                 failure = {
                                     Text(text = "Image failed to load")
                                 }
                             )
+                            CustomHeaderText(content = food.yemek_adi)
 
-                            Text(text = food.yemek_adi)
+                           Spacer(modifier = Modifier.height(8.dp))
 
-                            // Display total price
-                            Text(text = if( quantity <=1) "Fiyat : ${food.yemek_fiyat} ₺"
-                            else "Fiyat : ${String.format(totalPrice.toString()) } ₺",)
+                            CustomText(
+                                content = if (quantity <= 1) "Fiyat : ${food.yemek_fiyat} ₺"
+                                else "Fiyat : ${String.format(totalPrice.toString())} ₺"
+                            )
+
 
                             // Row to display minus icon, quantity, and plus icon
                             Row(
@@ -186,7 +196,7 @@ fun HomeScreen(homeScreenViewModel: HomeScreenViewModel, navController: NavContr
                                     )
                                 }
 
-                                Text(text = quantity.toString())
+                                Text(text = quantity.toString(), fontSize = 14.sp)
 
                                 IconButton(
                                     onClick = {

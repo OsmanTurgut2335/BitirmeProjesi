@@ -85,4 +85,6 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.5.0")
     implementation("com.github.skydoves:landscapist-glide:2.3.3")
 
+    implementation("com.airbnb.android:lottie-compose:4.0.0")
+
 }

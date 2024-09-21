@@ -24,6 +24,7 @@ import com.osman.bitirmeprojesi.R
 import com.osman.bitirmeprojesi.entity.Food
 import com.osman.bitirmeprojesi.viewmodels.FavoritesScreenViewModel
 import com.osman.bitirmeprojesi.viewmodels.HomeScreenViewModel
+import com.osman.bitirmeprojesi.views.customviews.TopBarText
 import com.skydoves.landscapist.glide.GlideImage
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,7 +38,7 @@ fun FavoritesScreen(
 
     Scaffold(
         bottomBar = { BottomNavigationBar(navController = navController) },
-        topBar = { TopAppBar(title = { Text(text = "Favoriler") },
+        topBar = { TopAppBar(title = { TopBarText(title = "Favoriler") },
             actions = {
                 // Trash icon button
                 IconButton(onClick = {
@@ -64,7 +65,7 @@ fun FavoritesScreen(
                         modifier = Modifier
                             .padding(5.dp)
                             .fillMaxWidth()
-                            .background(colorResource(id = R.color.logintfColor))
+                            .background(colorResource(id = R.color.textColor))
                             .clickable {
                                 // Serialize the Food object to JSON
                                 val foodJson = Gson().toJson(food)

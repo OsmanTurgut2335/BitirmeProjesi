@@ -20,7 +20,7 @@ fun Chip(content :String, onClick: () -> Unit) {
             modifier = Modifier.background(colorResource(id = R.color.buttonBackground)),
         border = BorderStroke(0.dp, Color.Transparent),) {
 
-        Text(text = content, color = colorResource(R.color.black))
+        Text(text = content, color = colorResource(R.color.bottomNavColor))
 
     }
 

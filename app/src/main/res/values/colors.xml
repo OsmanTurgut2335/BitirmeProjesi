@@ -8,7 +8,10 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="logintfColor">#FFB3E5FC</color>
-    <color name="buttonBackground">#FF9FA8DA</color>
+    <color name="buttonBackground">#FFE53935</color>
     <color name="redBackground">#FFD50000</color>
     <color name="bottomNavColor">#FFF5F5DC</color>
+    <color name="textColor">#FF37474F</color>
+    <color name="custombuttonText">#FFE0E0E0</color>
+
 </resources>

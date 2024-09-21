@@ -4,6 +4,7 @@ import BottomNavigationBar
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,13 +32,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.fontResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.osman.bitirmeprojesi.R
 import com.osman.bitirmeprojesi.entity.Food
+import com.osman.bitirmeprojesi.ui.theme.Roboto
 import com.osman.bitirmeprojesi.viewmodels.DetailsScreenViewModel
 import com.osman.bitirmeprojesi.views.customviews.Chip
+import com.osman.bitirmeprojesi.views.customviews.TopBarText
 import com.skydoves.landscapist.glide.GlideImage
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,7 +70,7 @@ fun DetailsScreen(
         bottomBar = { BottomNavigationBar(navController = navController) },
         topBar = {
             TopAppBar(
-                title = { Text(text = "Ürün Detayları") },
+                title = { TopBarText(title = "Ürün Detayları") },
                 actions = {
                     // Trash icon button
                     IconButton(onClick = {
@@ -83,25 +92,33 @@ fun DetailsScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Display food details
-                Text(text = "${food.yemek_adi}", modifier = Modifier.padding(bottom = 8.dp))
+
 
                 GlideImage(
                     imageModel = { imageUrl },
                     modifier = Modifier
-                        .height(100.dp)
-                        .width(100.dp),
+                        .height(200.dp)
+                        .width(200.dp),
                     loading = { CircularProgressIndicator(modifier = Modifier.size(40.dp)) },
                     failure = { Text(text = "Image failed to load") }
                 )
+                Text(text = "${food.yemek_adi}", modifier = Modifier.padding(bottom = 8.dp),
+                    style = TextStyle(
+                    fontFamily = Roboto,
+                    fontWeight = FontWeight.Normal,
+                    fontStyle = FontStyle.Italic,
+                        fontSize = 24.sp
+                ))
 
-                Text(text = "Fiyat ${totalPrice.toInt()} ₺", modifier = Modifier.padding(top = 8.dp))
+                Text(text = "${totalPrice.toInt()} ₺", modifier = Modifier.padding(top = 8.dp), fontSize = 20.sp)
 
                 // Row to handle quantity selection
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 10.dp)
                 ) {
                     IconButton(onClick = { if (quantity > 1) quantity-- }) {
                         Icon(
@@ -116,7 +133,7 @@ fun DetailsScreen(
                         Icon(imageVector = Icons.Default.Add, contentDescription = "Increase quantity")
                     }
                 }
-
+                Spacer(modifier = Modifier.height(12.dp))
                 // Button to add food to cart
                 Chip(onClick = {
                     detailsScreenViewModel.addToCart(

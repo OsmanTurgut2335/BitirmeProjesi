@@ -8,10 +8,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FavoritesScreenViewModel @Inject constructor(val repository: Repository) : ViewModel(){
-    // Method to save the favorite foods list
-    fun saveFavoriteFoods(favoriteFoods: List<Food>) {
-        repository.saveFavoriteFoods(favoriteFoods)
-    }
+
+
 
     // Method to get the favorite foods list
     fun getFavoriteFoods(): List<Food> {

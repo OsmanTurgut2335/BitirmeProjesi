@@ -1,15 +1,21 @@
 package com.osman.bitirmeprojesi.views
 
 import android.util.Log
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -34,6 +40,9 @@ import kotlin.math.log
 
 import com.google.firebase.auth.FirebaseAuth
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.ui.unit.dp
+import com.osman.bitirmeprojesi.views.customviews.TopBarText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,7 +71,7 @@ fun LoginScreen(navController: NavController, loginScreenViewModel: LoginScreenV
     }
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text(text = "Giriş Ekranına Hoşgeldiniz") }) },
+        topBar = { TopAppBar(title = { TopBarText(title = "Giriş Ekranı") }) },
         snackbarHost = { androidx.compose.material3.SnackbarHost(snackbarHostState) }
     ) { paddingValues ->
         Column(
@@ -73,14 +82,18 @@ fun LoginScreen(navController: NavController, loginScreenViewModel: LoginScreenV
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             TextField(
-                colors = TextFieldDefaults.textFieldColors(containerColor = colorResource(id = R.color.logintfColor)),
+                colors = TextFieldDefaults.textFieldColors(containerColor = colorResource(id = R.color.custombuttonText),
+                    focusedIndicatorColor =colorResource(id = R.color.buttonBackground),
+                    unfocusedIndicatorColor = colorResource(id = R.color.buttonBackground)),
                 value = tfUsername.value,
                 onValueChange = { tfUsername.value = it },
                 label = { Text(text = "E-mail") }
             )
 
             TextField(
-                colors = TextFieldDefaults.textFieldColors(containerColor = colorResource(id = R.color.logintfColor)),
+                colors = TextFieldDefaults.textFieldColors(containerColor = colorResource(id = R.color.custombuttonText),
+                    focusedIndicatorColor =colorResource(id = R.color.buttonBackground),
+                    unfocusedIndicatorColor = colorResource(id = R.color.buttonBackground)),
                 value = tfPassword.value,
                 onValueChange = { tfPassword.value = it },
                 label = { Text(text = "Parola") },
@@ -97,11 +110,19 @@ fun LoginScreen(navController: NavController, loginScreenViewModel: LoginScreenV
                 }
             )
 
-            Button(onClick = {
-                loginScreenViewModel.login(tfUsername.value, tfPassword.value)
-            }) {
+
+            Button(
+                onClick = {  loginScreenViewModel.login(tfUsername.value, tfPassword.value) },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorResource(id = R.color.custombuttonText),  // Color inside the circle
+                    contentColor = colorResource(id = R.color.buttonBackground)    // Text color
+                ),
+                shape = CircleShape,  // Makes the button circular
+             
+            ) {
                 Text(text = "Giriş Yap")
             }
+
 
             // Handle the result
             loginResult?.let { result ->

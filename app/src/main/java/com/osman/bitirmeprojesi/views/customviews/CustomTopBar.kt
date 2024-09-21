@@ -12,14 +12,20 @@ import androidx.compose.runtime.Composable
 
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 
 import com.osman.bitirmeprojesi.R
 import com.osman.bitirmeprojesi.entity.Food
+import com.osman.bitirmeprojesi.ui.theme.Roboto
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,13 +43,13 @@ fun CustomTopBar(
 
 ) {
     TopAppBar(
-        title = { Text(text = title) },
+        title = { TopBarText(title = title) },
         actions = {
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // Text for sorting
-                Text(text = "Sırala")
+                CustomHeaderText(content = "Sırala")
 
                 // IconButton for sorting
                 IconButton(onClick = { onSortExpandedChange(true) }) {
@@ -56,21 +62,23 @@ fun CustomTopBar(
                     onDismissRequest = { onSortExpandedChange(false) }
                 ) {
                     DropdownMenuItem(
-                        text = { Text("İsime Göre Sırala") },
+                      //  text = { Text("İsime Göre Sırala") },
+                        text = { CustomHeaderText(content = "İsime Göre Sırala") },
                         onClick = {
                             onSortExpandedChange(false)
                             onSortSelected(SortCriteria.Name) // Trigger sorting by name
                         }
                     )
                     DropdownMenuItem(
-                        text = { Text("Artan Fiyata Göre Sırala") },
+
+                        text = { CustomHeaderText(content = "Artan Fiyata Göre Sırala") },
                         onClick = {
                             onSortExpandedChange(false)
                             onSortSelected(SortCriteria.PriceAscending) // Trigger sorting by price ascending
                         }
                     )
                     DropdownMenuItem(
-                        text = { Text("Azalan Fiyata Göre Sırala") },
+                        text = { CustomHeaderText(content = "Azalan Fiyata Göre Sırala") },
                         onClick = {
                             onSortExpandedChange(false)
                             onSortSelected(SortCriteria.PriceDescending) // Trigger sorting by price descending
@@ -90,7 +98,8 @@ fun CustomTopBar(
                 onDismissRequest = { onExpandedChange(false) }
             ) {
                 DropdownMenuItem(
-                    text = { Text("Çıkış yap") },
+                    text = { CustomHeaderText(content = "Çıkış Yap") },
+
                     onClick = {
                         onExpandedChange(false)
                         FirebaseAuth.getInstance().signOut()
@@ -103,14 +112,14 @@ fun CustomTopBar(
                         }
                     }
                 )
-
+/*
                 DropdownMenuItem(
                     text = { Text("Profil") },
                     onClick = {
                         onExpandedChange(false)
                         // Handle profile click
                     }
-                )
+                )*/
             }
         }
     )

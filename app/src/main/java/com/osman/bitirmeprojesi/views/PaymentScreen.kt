@@ -2,6 +2,7 @@ package com.osman.bitirmeprojesi.views
 
 import BottomNavigationBar
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
@@ -11,13 +12,18 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import com.osman.bitirmeprojesi.R
 import com.osman.bitirmeprojesi.entity.CartFood
 import com.osman.bitirmeprojesi.viewmodels.PaymentScreenViewModel
+import com.osman.bitirmeprojesi.views.customviews.AnimatedPreloader
+import com.osman.bitirmeprojesi.views.customviews.CustomText
+import com.osman.bitirmeprojesi.views.customviews.TopBarText
 import com.skydoves.landscapist.glide.GlideImage
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,7 +55,7 @@ fun PaymentScreen(paymentScreenViewModel: PaymentScreenViewModel, navController:
         acc + price
     }
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Cart Items") },
+        topBar = { TopAppBar(  title = { TopBarText(title = "Sepetiniz") },
             actions = {
                 // Trash icon button
                 IconButton(onClick = {
@@ -74,7 +80,7 @@ fun PaymentScreen(paymentScreenViewModel: PaymentScreenViewModel, navController:
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        CircularProgressIndicator()
+                        AnimatedPreloader(modifier = Modifier.size(200.dp))
                     }
                 }
                 errorMessage != null -> {
@@ -120,7 +126,8 @@ fun PaymentScreen(paymentScreenViewModel: PaymentScreenViewModel, navController:
                     ) {
                         Text(
                             text = "Toplam: $totalPrice ₺",
-                            style = MaterialTheme.typography.titleMedium
+                            style = MaterialTheme.typography.titleLarge,
+                            color = colorResource(id = R.color.textColor)
                         )
                     }
                 }
@@ -128,19 +135,28 @@ fun PaymentScreen(paymentScreenViewModel: PaymentScreenViewModel, navController:
             if (showDialog && itemToDelete != null) {
                 AlertDialog(
                     onDismissRequest = { showDialog = false },
-                    title = { Text("Are you sure?") },
-                    text = { Text("Do you really want to delete this item?") },
+                    title = { CustomText(content = "Emin misiniz ?") },
+                    text = {  CustomText(content = "Bunu silmek istediğinizden emin misiniz ?") },
                     confirmButton = {
                         Button(onClick = {
                             paymentScreenViewModel.deleteItemFromCart(itemToDelete!!)
                             showDialog = false
-                        }) {
-                            Text("Delete")
+                        }, colors = ButtonDefaults.buttonColors(
+                            containerColor = colorResource(id = R.color.buttonBackground),  // Color inside the circle
+                            contentColor = colorResource(id = R.color.bottomNavColor)    // Text color
+                        ),
+                            shape = CircleShape,  ) {
+                            CustomText(content = "Sil ?")
                         }
                     },
                     dismissButton = {
-                        Button(onClick = { showDialog = false }) {
-                            Text("Cancel")
+                        Button(onClick = { showDialog = false },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = colorResource(id = R.color.buttonBackground),  // Color inside the circle
+                                contentColor = colorResource(id = R.color.bottomNavColor)    // Text color
+                            ),
+                            shape = CircleShape,  ) {
+                            CustomText(content = "İptal")
                         }
                     }
                 )
@@ -155,7 +171,9 @@ fun CartItemCard(item: CartFood, onDeleteClick: () -> Unit) {
         modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(4.dp)
+        elevation = CardDefaults.cardElevation(4.dp),
+        colors = CardColors(containerColor = colorResource(id = R.color.bottomNavColor), contentColor =colorResource(id = R.color.redBackground) ,
+            disabledContentColor =colorResource(id = R.color.redBackground) , disabledContainerColor =colorResource(id = R.color.bottomNavColor) )
     ) {
         Row(
             modifier = Modifier
@@ -170,7 +188,8 @@ fun CartItemCard(item: CartFood, onDeleteClick: () -> Unit) {
                 modifier = Modifier
                     .size(90.dp), // Fixed size for the image
                 loading = {
-                    CircularProgressIndicator(modifier = Modifier.size(40.dp))
+                 //   CircularProgressIndicator(modifier = Modifier.size(40.dp))
+                    AnimatedPreloader(modifier = Modifier.size(200.dp))
                 },
                 failure = {
                     Text(text = "Image failed to load")
@@ -185,9 +204,11 @@ fun CartItemCard(item: CartFood, onDeleteClick: () -> Unit) {
                 modifier = Modifier.weight(1f), // Take up remaining space in the row
                 verticalArrangement = Arrangement.SpaceEvenly
             ) {
-                Text(text = item.yemek_adi, style = MaterialTheme.typography.titleMedium)
-                Text(text = "${item.yemek_fiyat} ₺", style = MaterialTheme.typography.bodyMedium)
-                Text(text = "Quantity: ${item.yemek_siparis_adet}", style = MaterialTheme.typography.bodyMedium)
+                Text(text = item.yemek_adi, style = MaterialTheme.typography.titleMedium,color = colorResource(id = R.color.textColor))
+              //  Text(text = "${item.yemek_fiyat} ₺", style = MaterialTheme.typography.bodyMedium,color = colorResource(id = R.color.textColor))
+                CustomText(content = "${item.yemek_fiyat} ₺")
+               // Text(text = "Quantity: ${item.yemek_siparis_adet}", style = MaterialTheme.typography.bodyMedium,color = colorResource(id = R.color.textColor))
+                CustomText(content = "Adet: ${item.yemek_siparis_adet}")
             }
 
             // IconButton for deleting the item on the far right
