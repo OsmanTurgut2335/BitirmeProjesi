@@ -38,7 +38,16 @@ fun FavoritesScreen(
 
     Scaffold(
         bottomBar = { BottomNavigationBar(navController = navController) },
-        topBar = { TopAppBar(title = { TopBarText(title = "Favoriler") },
+        topBar = { TopAppBar(
+            title = {
+
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(text = "Favoriler")
+                }
+            } ,
             actions = {
                 // Trash icon button
                 IconButton(onClick = {
@@ -120,7 +129,7 @@ fun FavoritesScreen(
                     .padding(paddingValues),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = "No favorite foods added.")
+                Text(text = "Henüz bir favoriniz yok.")
             }
         }
     }

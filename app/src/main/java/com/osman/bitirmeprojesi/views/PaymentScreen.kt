@@ -4,6 +4,7 @@ import BottomNavigationBar
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -22,6 +23,7 @@ import com.osman.bitirmeprojesi.R
 import com.osman.bitirmeprojesi.entity.CartFood
 import com.osman.bitirmeprojesi.viewmodels.PaymentScreenViewModel
 import com.osman.bitirmeprojesi.views.customviews.AnimatedPreloader
+import com.osman.bitirmeprojesi.views.customviews.CustomHeaderText
 import com.osman.bitirmeprojesi.views.customviews.CustomText
 import com.osman.bitirmeprojesi.views.customviews.TopBarText
 import com.skydoves.landscapist.glide.GlideImage
@@ -46,16 +48,25 @@ fun PaymentScreen(paymentScreenViewModel: PaymentScreenViewModel, navController:
 
 
     // Fetch cart items when the screen is launched
-    LaunchedEffect(Unit) {
+    LaunchedEffect(true) {
         paymentScreenViewModel.fetchCartItems("osman_turgut")
     }
+
     // Calculate the total price of the cart items
     val totalPrice = cartItemsFinal.fold(0) { acc, item ->
         val price = item.yemek_fiyat.toIntOrNull() ?: 0
         acc + price
     }
     Scaffold(
-        topBar = { TopAppBar(  title = { TopBarText(title = "Sepetiniz") },
+        topBar = { TopAppBar(    title = {
+            // Use a Box to center the text
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(text = "Sepetiniz")
+            }
+        } ,
             actions = {
                 // Trash icon button
                 IconButton(onClick = {
@@ -67,7 +78,7 @@ fun PaymentScreen(paymentScreenViewModel: PaymentScreenViewModel, navController:
                     Icon(imageVector = Icons.Default.Clear, contentDescription = "Delete")
                 }
             }) },
-        bottomBar = { BottomNavigationBar(navController = navController) }
+        bottomBar = { BottomNavigationBar( navController) }
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -80,7 +91,10 @@ fun PaymentScreen(paymentScreenViewModel: PaymentScreenViewModel, navController:
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        AnimatedPreloader(modifier = Modifier.size(200.dp))
+                        AnimatedPreloader(
+                            modifier = Modifier.size(100.dp), // You can adjust the size as needed
+                            animationResId = R.raw.loading_animation // Pass the animation resource
+                        )
                     }
                 }
                 errorMessage != null -> {
@@ -135,25 +149,29 @@ fun PaymentScreen(paymentScreenViewModel: PaymentScreenViewModel, navController:
             if (showDialog && itemToDelete != null) {
                 AlertDialog(
                     onDismissRequest = { showDialog = false },
-                    title = { CustomText(content = "Emin misiniz ?") },
-                    text = {  CustomText(content = "Bunu silmek istediğinizden emin misiniz ?") },
+                    title = { Box (modifier = Modifier
+                        .fillMaxWidth(),
+                        contentAlignment = Alignment.Center){
+                        CustomHeaderText(content = "Onay")
+                    } },
+                    text = {  CustomText(content = "Bu ürünü sepetinizden kaldırmak istediğinize emin misiniz ?") },
                     confirmButton = {
                         Button(onClick = {
                             paymentScreenViewModel.deleteItemFromCart(itemToDelete!!)
                             showDialog = false
                         }, colors = ButtonDefaults.buttonColors(
-                            containerColor = colorResource(id = R.color.buttonBackground),  // Color inside the circle
-                            contentColor = colorResource(id = R.color.bottomNavColor)    // Text color
+                            containerColor = colorResource(id = R.color.buttonBackground),
+                            contentColor = colorResource(id = R.color.bottomNavColor)
                         ),
                             shape = CircleShape,  ) {
-                            CustomText(content = "Sil ?")
+                            CustomText(content = "Sil")
                         }
                     },
                     dismissButton = {
                         Button(onClick = { showDialog = false },
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = colorResource(id = R.color.buttonBackground),  // Color inside the circle
-                                contentColor = colorResource(id = R.color.bottomNavColor)    // Text color
+                                containerColor = colorResource(id = R.color.buttonBackground),
+                                contentColor = colorResource(id = R.color.bottomNavColor)
                             ),
                             shape = CircleShape,  ) {
                             CustomText(content = "İptal")
@@ -179,8 +197,8 @@ fun CartItemCard(item: CartFood, onDeleteClick: () -> Unit) {
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically, // Align items vertically
-            horizontalArrangement = Arrangement.SpaceBetween // Arrange items with space between
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             // Image on the left
             GlideImage(
@@ -188,8 +206,11 @@ fun CartItemCard(item: CartFood, onDeleteClick: () -> Unit) {
                 modifier = Modifier
                     .size(90.dp), // Fixed size for the image
                 loading = {
-                 //   CircularProgressIndicator(modifier = Modifier.size(40.dp))
-                    AnimatedPreloader(modifier = Modifier.size(200.dp))
+
+                    AnimatedPreloader(
+                        modifier = Modifier.size(100.dp),
+                        animationResId = R.raw.loading_animation // Pass the animation resource
+                    )
                 },
                 failure = {
                     Text(text = "Image failed to load")
@@ -205,9 +226,9 @@ fun CartItemCard(item: CartFood, onDeleteClick: () -> Unit) {
                 verticalArrangement = Arrangement.SpaceEvenly
             ) {
                 Text(text = item.yemek_adi, style = MaterialTheme.typography.titleMedium,color = colorResource(id = R.color.textColor))
-              //  Text(text = "${item.yemek_fiyat} ₺", style = MaterialTheme.typography.bodyMedium,color = colorResource(id = R.color.textColor))
-                CustomText(content = "${item.yemek_fiyat} ₺")
-               // Text(text = "Quantity: ${item.yemek_siparis_adet}", style = MaterialTheme.typography.bodyMedium,color = colorResource(id = R.color.textColor))
+
+                CustomText(content = "Toplam: ${item.yemek_fiyat} ₺")
+
                 CustomText(content = "Adet: ${item.yemek_siparis_adet}")
             }
 

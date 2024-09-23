@@ -127,7 +127,7 @@ fun HomeScreen(homeScreenViewModel: HomeScreenViewModel, navController: NavContr
                 val isFavorite = remember { mutableStateOf(favoriteFoods.contains(food)) }
 
                 // Convert price from String to Double for calculation
-                val price = food.yemek_fiyat.toDoubleOrNull() ?: 0.0
+                val price = food.yemek_fiyat.toIntOrNull() ?: 0
                 val totalPrice = quantity * price
 
                 Card(
@@ -163,7 +163,10 @@ fun HomeScreen(homeScreenViewModel: HomeScreenViewModel, navController: NavContr
 
                                    // CircularProgressIndicator()
 
-                                    AnimatedPreloader(modifier = Modifier.size(200.dp))
+                                    AnimatedPreloader(
+                                        modifier = Modifier.size(100.dp), // You can adjust the size as needed
+                                        animationResId = R.raw.loading_animation // Pass the animation resource
+                                    )
                                 },
                                 failure = {
                                     Text(text = "Image failed to load")
@@ -187,7 +190,7 @@ fun HomeScreen(homeScreenViewModel: HomeScreenViewModel, navController: NavContr
                             ) {
                                 IconButton(
                                     onClick = {
-                                        if (quantity > 1) quantity-- // Decrease quantity
+                                        if (quantity >= 1) quantity-- // Decrease quantity
                                     }
                                 ) {
                                     Icon(

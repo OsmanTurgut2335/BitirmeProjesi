@@ -51,30 +51,16 @@ fun BottomNavigationBar(navController: NavController) {
                 }
             }
         )
-        /*
-        NavigationBarItem(
-            icon = { Icon(Icons.Filled.Person, contentDescription = "Profile") },
-            label = { Text("Profile") },
-            selected = currentRoute == "profileScreen",
-            onClick = {
-                if (currentRoute != "profileScreen") {
-                    navController.navigate("profileScreen") {
-                        popUpTo(navController.graph.startDestinationId) { saveState = true }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                }
-            }
-        )*/
 
         NavigationBarItem(
             icon = { Icon(Icons.Filled.ShoppingCart, contentDescription = "Sepet" ,
                 tint = colorResource(id = R.color.redBackground
                     )) },
             label = { CustomText(content = "Sepet") },
-            selected = currentRoute == "paymentScreen",
-            onClick = {
-                val username = "osman_turgut" // Replace with your actual username variable
+            selected = currentRoute?.startsWith("paymentScreen") == true,
+
+                    onClick = {
+                val username = "osman_turgut"
                 if (currentRoute != "paymentScreen") {
                     navController.navigate("paymentScreen/$username") {
                         popUpTo(navController.graph.startDestinationId) { saveState = true }

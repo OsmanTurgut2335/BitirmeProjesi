@@ -1,7 +1,11 @@
 package com.osman.bitirmeprojesi.views.customviews
 
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 
 import androidx.compose.material.icons.Icons
 
@@ -18,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 import androidx.navigation.NavController
@@ -49,7 +54,7 @@ fun CustomTopBar(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // Text for sorting
-                CustomHeaderText(content = "Sırala")
+                CustomHeaderText(content = "Ürünleri Sırala")
 
                 // IconButton for sorting
                 IconButton(onClick = { onSortExpandedChange(true) }) {
@@ -93,34 +98,34 @@ fun CustomTopBar(
             }
 
             // Dropdown menu for the three-dot menu
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { onExpandedChange(false) }
-            ) {
-                DropdownMenuItem(
-                    text = { CustomHeaderText(content = "Çıkış Yap") },
+            Box {
+                Spacer(modifier = Modifier.padding(top = 40.dp,))
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { onExpandedChange(false) },
 
-                    onClick = {
-                        onExpandedChange(false)
-                        FirebaseAuth.getInstance().signOut()
+                    ) {
 
-                        navController.navigate("loginscreen") {
-                            popUpTo(navController.graph.startDestinationId) {
-                                inclusive = true
+                    DropdownMenuItem(
+                       // modifier = Modifier.padding(end = 10.dp),
+                        text = { CustomHeaderText(content = "Çıkış Yap") },
+
+                        onClick = {
+                            onExpandedChange(false)
+                            FirebaseAuth.getInstance().signOut()
+
+                            navController.navigate("loginscreen") {
+                                popUpTo(navController.graph.startDestinationId) {
+                                    inclusive = true
+                                }
+                                launchSingleTop = true
                             }
-                            launchSingleTop = true
                         }
-                    }
-                )
-/*
-                DropdownMenuItem(
-                    text = { Text("Profil") },
-                    onClick = {
-                        onExpandedChange(false)
-                        // Handle profile click
-                    }
-                )*/
+                    )
+
+                }
             }
+
         }
     )
 }

@@ -110,7 +110,7 @@ fun DetailsScreen(
                         fontSize = 24.sp
                 ))
 
-                Text(text = "${totalPrice.toInt()} ₺", modifier = Modifier.padding(top = 8.dp), fontSize = 20.sp)
+                Text(text = "Fiyat:${totalPrice.toInt()} ₺", modifier = Modifier.padding(top = 8.dp), fontSize = 20.sp)
 
                 // Row to handle quantity selection
                 Row(

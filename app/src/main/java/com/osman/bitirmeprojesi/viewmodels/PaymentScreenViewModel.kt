@@ -33,7 +33,7 @@ class PaymentScreenViewModel @Inject constructor(val repository: Repository) : V
     val errorMessage: StateFlow<String?> = _errorMessage
 
     init {
-        // Fetch cart items for the initial user "osman_turgut" on initialization
+
         fetchCartItems("osman_turgut")
     }
 
@@ -47,7 +47,7 @@ class PaymentScreenViewModel @Inject constructor(val repository: Repository) : V
                 val response: GetCartResponse = foodDao.getFoodFromCart(username)
 
                 if (response.success == 1) {
-                    val cartItems = response.cartFoodList ?: emptyList()
+                    val cartItems = response.cartFoodList
                     _cartFoodList.value = cartItems
 
                     // Aggregate items with the same food name
@@ -99,6 +99,7 @@ class PaymentScreenViewModel @Inject constructor(val repository: Repository) : V
 
                 // Fetch the cart items again to refresh the list
                 fetchCartItems(cartFood.kullanici_adi)
+
             } catch (e: Exception) {
                 // Handle the error
                 println("Error deleting item: ${e.message}")
