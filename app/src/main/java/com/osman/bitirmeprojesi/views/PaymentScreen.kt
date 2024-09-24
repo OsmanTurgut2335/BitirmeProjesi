@@ -102,10 +102,7 @@ fun PaymentScreen(paymentScreenViewModel: PaymentScreenViewModel, navController:
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(
-                            text = errorMessage ?: "Unknown error",
-                            style = MaterialTheme.typography.bodyLarge
-                        )
+                        Text("Sepetiniz Boş", style = MaterialTheme.typography.bodyLarge)
                     }
                 }
                 cartItems.isEmpty() -> {
