@@ -8,8 +8,9 @@ and more..<br />
 Also the MVVM (Model-View-ViewModel) as the architecture structure .
 # Project Screens
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/b3a229c4-922a-4e8f-a1ac-145541764189" width="30%" />
-    <img src="https://github.com/user-attachments/assets/8ff54b09-f5d2-46a6-868f-9bf50d5c4828" width="30%" />
-  <img src="https://github.com/user-attachments/assets/b7861c46-0c18-40ff-834e-2ced33901d04" width="30%" />
+  <img src="https://github.com/user-attachments/assets/b3a229c4-922a-4e8f-a1ac-145541764189" width="25%" />
+    <img src="https://github.com/user-attachments/assets/8ff54b09-f5d2-46a6-868f-9bf50d5c4828" width="25%" />
+  <img src="https://github.com/user-attachments/assets/b7861c46-0c18-40ff-834e-2ced33901d04" width="25%" />
+  <img src="https://github.com/user-attachments/assets/7a765b6f-4fcb-456a-9b22-a065895bbd30" width="25%" />
 </p> <br />
 
